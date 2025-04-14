@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>가위 바위 보 AI 게임</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>가위 바위 보 AI 게임</h1>
+
+    <div class="container">
+        <!-- 왼쪽: 그래프 -->
+        <div class="left-panel">
+            <h2>누적 스코어 그래프</h2>
+            <canvas id="scoreChart"></canvas>
+        </div>
+
+        <!-- 오른쪽: 게임 패널 -->
+        <div class="right-panel">
+            <div>
+                <label for="difficulty">난이도 선택: </label>
+                <select id="difficulty" onchange="setDifficulty()">
+                    <option value="easy">쉬움</option>
+                    <option value="normal" selected>보통</option>
+                    <option value="hard">어려움</option>
+                    <option value="expert">전문가</option>
+                    <option value="custom">커스텀</option>
+                </select>
+            </div>
+            
+            <div id="custom-settings" style="display:none; margin-top: 10px;">
+                <label>랜덤 비율: <span id="randomRateLabel">0.5</span></label>
+                <input type="range" id="randomRate" min="0" max="1" step="0.01" value="0.5" oninput="updateCustomLabel('randomRate')"><br>
+            
+                <label>미끼 전략 비율: <span id="baitRateLabel">0.1</span></label>
+                <input type="range" id="baitRate" min="0" max="1" step="0.01" value="0.1" oninput="updateCustomLabel('baitRate')"><br>
+            
+                <label>메모리 깊이: <span id="memoryDepthLabel">4</span></label>
+                <input type="range" id="memoryDepth" min="1" max="30" step="1" value="10" oninput="updateCustomLabel('memoryDepth')"><br>
+            
+                <label><input type="checkbox" id="advancedStrategy"> 고급 전략 사용</label><br>
+                <label><input type="checkbox" id="adaptiveDepth"> 적응형 메모리 깊이 사용</label><br>
+
+                <button onclick="applyCustomDifficulty()">커스텀 난이도 적용</button>
+            </div>
+            
+            <div>
+                <button onclick="playGame('1')">✌ 가위</button>
+                <button onclick="playGame('2')">✊ 바위</button>
+                <button onclick="playGame('3')">✋ 보</button>
+            </div>
+
+            <div>
+                <button onclick="togglePreview()">상대 패 미리보기: <span id="preview-status">OFF</span></button>
+            </div>
+
+            <div class="result-section">
+                <h2>결과</h2>
+                <p id="result">게임을 시작하세요!</p>
+            </div>
+
+            <div class="score-section">
+                <h2>스코어</h2>
+                <p id="score">AI: 0 | 플레이어: 0 | 무승부: 0</p>
+            </div>
+
+            <div class="preview-section">
+                <h2>AI 선택 (미리보기)</h2>
+                <p id="ai-preview">OFF 상태입니다.</p>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button onclick="toggleStrategyLog()">전략 로그 펼치기 / 접기</button>
+                <pre id="strategy-log" style="display: none; background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; height: 200px; overflow-y: auto;"></pre>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
